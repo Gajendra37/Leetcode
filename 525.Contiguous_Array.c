@@ -1,0 +1,61 @@
+/*
+Description:
+
+Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
+
+Example 1:
+Input: nums = [0,1]
+Output: 2
+Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
+  
+Example 2:
+Input: nums = [0,1,0]
+Output: 2
+Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+  
+Example 3:
+Input: nums = [0,1,1,1,1,1,0,0,0]
+Output: 6
+Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
+*/
+
+//Solution:
+
+int findMaxLength(int* nums, int numsSize) {
+    
+    int offset = numsSize;
+    int size = 2 * numsSize + 1;
+
+    int* map = (int*)malloc(size * sizeof(int));
+
+    for (int i = 0; i < size; i++)
+        map[i] = -2;
+
+    int sum = 0;
+    int maxLen = 0;
+
+    map[offset] = -1;
+
+    for (int i = 0; i < numsSize; i++) {
+
+        if (nums[i] == 0)
+            sum -= 1;
+        else
+            sum += 1;
+
+        if (map[sum + offset] != -2) {
+
+            int len = i - map[sum + offset];
+
+            if (len > maxLen)
+                maxLen = len;
+
+        } else {
+            map[sum + offset] = i;
+        }
+    }
+
+    free(map);
+
+    return maxLen;
+}
